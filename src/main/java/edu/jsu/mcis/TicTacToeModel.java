@@ -72,12 +72,14 @@ public class TicTacToeModel{
         xTurn = true;
         
         /* Create grid (width x width) as a 2D Mark array */
-
-        /* INSERT YOUR CODE HERE */
+        grid = new Mark[width][width];
 
         /* Initialize grid by filling every square with empty marks */
-
-        /* INSERT YOUR CODE HERE */
+        for(int i = 0; i < width; i++) { 
+        	for(int j = 0; j < width; j++) {
+        		grid[i][j] = Mark.EMPTY;
+        	}
+        }
         
     }
 	
@@ -86,40 +88,41 @@ public class TicTacToeModel{
         /* Place the current player's mark in the square at the specified
            location, but only if the location is valid and if the square is
            empty! */
-        
-        /* INSERT YOUR CODE HERE */
+    	try{
+    		if((!isSquareMarked(row, col)) && ((isValidSquare(row, col)))){
+    			if(xTurn){
+    				grid[row][col]= Mark.X;
+					xTurn = !xTurn;
+				}
+				else{
+					grid[row][col] = Mark.O;
+					xTurn = !xTurn;
+				}
+			return true;
+			}
+		}catch(Exception e){}
 
-        return false; /* remove this line! */
-        
+        return false;
+
     }
 	
     private boolean isValidSquare(int row, int col) {
         
         /* Return true if specified location is within grid bounds */
-        
-        /* INSERT YOUR CODE HERE */
-
-        return false; /* remove this line! */
-        
+    	return (row < width ) && (row >= 0) && (col <width) && (col >=0);
     }
 	
     private boolean isSquareMarked(int row, int col) {
         
         /* Return true if square at specified location is marked */
-        
-        /* INSERT YOUR CODE HERE */
-
-        return false; /* remove this line! */
+        return grid[row][col] != Mark.EMPTY;
             
     }
 	
     public Mark getMark(int row, int col) {
         
         /* Return mark from the square at the specified location */
-        
-        /* INSERT YOUR CODE HERE */
-
-        return null; /* remove this line! */
+        return grid[row][col];
             
     }
 	
@@ -129,9 +132,14 @@ public class TicTacToeModel{
            tie, or if the game is not over, and return the corresponding Result
            value */
         
-        /* INSERT YOUR CODE HERE */
-
-        return null; /* remove this line! */
+    	if(isMarkWin(Mark.X))
+			return Result.X;
+        else if (isMarkWin(Mark.O))
+			return Result.O;
+		else if ( isTie())
+			return Result.TIE;
+		else 
+			return Result.NONE;
 
     }
 	
@@ -139,20 +147,69 @@ public class TicTacToeModel{
         
         /* Check the squares of the board to see if the specified mark is the
            winner */
+
+    	//Rows
+        int j;
+        checkRow: for(int i = 0; i < width; i++) {
+            for (j = 0; j < width; j++) {
+                if (grid[i][j] != mark) {
+                    break checkRow;
+                }
+                if (j == width - 1) {
+                    return true;
+                }
+            }
+        }
+
+        //Columns
+        int l;
+        checkCol: for(int k = 0; k < width; k++) {
+            for (l = 0; l < width; l++) {
+                if (grid[l][k] != mark) {
+                    break checkCol;
+                }
+                if (l == width - 1) {
+                    return true;
+                }
+            }
+        }
+
+        //Diagonal
+        checkDiag: for (int m = 0; m < width; m++) {
+            if (grid[m][m] != mark) {
+                break checkDiag;
+            }
+            if (m == width - 1) {
+                return true;
+            }
+        }
+
+        //Anti-Diagonal
+        checkAnti: for (int n = 0; n < width; n++) {
+            if (grid[n][(width - 1) - n] != mark) {
+                break checkAnti;
+            }
+            if (n == width - 1) {
+                return true;
+            }
+        }
         
-        /* INSERT YOUR CODE HERE */
-
-        return false; /* remove this line! */
-
+        return false;
     }
 	
     private boolean isTie() {
         
         /* Check the squares of the board to see if the game is a tie */
 
-        /* INSERT YOUR CODE HERE */
+        for (int i =0; i< width; i++) {
+            for (int j=0; j<width; j++){
+                if(grid[i][j].equals(Mark.EMPTY)) {
+                    return false;
+                }
+            }
+        }
 
-        return false; /* remove this line! */
+        return false;
         
     }
 
